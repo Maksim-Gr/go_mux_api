@@ -7,7 +7,7 @@ import (
 	_ "github.com/lib/pq"
 )
 
-// Represents the main app
+// App represents the main app
 type App struct {
 	Router *mux.Router
 	DB     *sql.DB
