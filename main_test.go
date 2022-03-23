@@ -84,3 +84,10 @@ func TestGetNonExistentProduct(t *testing.T) {
 		t.Errorf("Expected the 'error' key of the response to be 'Product not found'. Got '%s'", m["error"])
 	}
 }
+
+
+func TestCreateProduct(t *testing.T) {
+	clearTable()
+
+	var jsonStr = []byte(`{"name": "test product", "price":11.22}`)
+}
