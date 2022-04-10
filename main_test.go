@@ -147,5 +147,22 @@ func TestUpdateProduct(t *testing.T) {
 	req, _ = http.NewRequest("PUT", "/product/1", bytes.NewBuffer(jsonStr))
 	req.Header.Set("Content-Type", "application/json")
 
-	//
+	response = executeRequest(req)
+
+	checkResponseCode(t, http.StatusOK, response.Code)
+
+	var m map[string]interface{}
+	json.Unmarshal(response.Body.Bytes(), &m)
+
+	if m["id"] != originalProduct["id"] {
+		t.Errorf("Expected the id to remain the same (%v). Got %v", originalProduct["id"], m["id"])
+	}
+	if m["name"] == originalProduct["name"] {
+		t.Errorf("Expected the name to change from '%v' to '%v'. Got '%v'", originalProduct["name"], m["name"], m["name"])
+	}
+
+	if m["price"] == originalProduct["price"] {
+		t.Errorf("Expected the price to change from '%v' to '%v'. Got '%v'", originalProduct["price"], m["price"], m["price"])
+	}
+
 }
