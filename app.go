@@ -18,6 +18,14 @@ type App struct {
 	DB     *sql.DB
 }
 
+func (a *App) initializeRoutes() {
+	a.Router.HandleFunc("/products", a.getProducts).Methods("GET")
+	a.Router.HandleFunc("/product", a.createProduct).Methods("POST")
+	a.Router.HandleFunc("/product/{id:[0-9]+}", a.getProduct).Methods("GET")
+	a.Router.HandleFunc("/product/{id:[0-9]+}", a.updateProduct).Methods("PUT")
+	a.Router.HandleFunc("/product/{id:[0-9]+}", a.deleteProduct).Methods("DELETE")
+}
+
 func (a *App) Initialize(user, password, dbname string) {
 	connectionString :=
 		fmt.Sprintf("user=%s password=%s dbname=%s sslmode=disable", user, password, dbname)
@@ -29,6 +37,11 @@ func (a *App) Initialize(user, password, dbname string) {
 	}
 
 	a.Router = mux.NewRouter()
+
+	a.initializeRoutes()
+}
+func (a *App) Run(addr string) {
+	log.Fatal(http.ListenAndServe(":8010", a.Router))
 }
 
 func (a *App) getProduct(w http.ResponseWriter, r *http.Request) {
@@ -142,5 +155,3 @@ func respondWithJson(w http.ResponseWriter, code int, payload interface{}) {
 	w.WriteHeader(code)
 	w.Write(response)
 }
-
-func (a *App) Run(addr string) {}
