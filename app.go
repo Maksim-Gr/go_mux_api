@@ -72,7 +72,7 @@ func (a *App) getProducts(w http.ResponseWriter, r *http.Request) {
 	respondWithJson(w, http.StatusOK, products)
 }
 
-func (a *App) CreateProduct(w http.ResponseWriter, r *http.Request) {
+func (a *App) createProduct(w http.ResponseWriter, r *http.Request) {
 	var p product
 	decoder := json.NewDecoder(r.Body)
 	if err := decoder.Decode(&p); err != nil {
@@ -113,6 +113,22 @@ func (a *App) updateProduct(w http.ResponseWriter, r *http.Request) {
 	}
 
 	respondWithJson(w, http.StatusOK, p)
+}
+
+func (a *App) deleteProduct(w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+	id, err := strconv.Atoi(vars["id"])
+	if err != nil {
+		respondWithError(w, http.StatusBadRequest, "invalid product id")
+		return
+	}
+
+	p := product{ID: id}
+	if err := p.deleteProduct(a.DB); err != nil {
+		respondWithError(w, http.StatusInternalServerError, err.Error())
+		return
+	}
+	respondWithJson(w, http.StatusOK, map[string]string{"result": "success"})
 }
 
 func respondWithError(w http.ResponseWriter, code int, message string) {
