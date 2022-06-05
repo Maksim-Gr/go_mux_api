@@ -3,14 +3,13 @@ package main_test
 import (
 	"bytes"
 	"encoding/json"
+	main "github.com/Maksim-Gr/go_mux_api/internal/server"
 	"log"
 	"net/http"
 	"net/http/httptest"
 	"os"
 	"strconv"
 	"testing"
-
-	main "github.com/Maksim-Gr/go_mux_api"
 )
 
 var a main.App

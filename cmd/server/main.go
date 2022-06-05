@@ -1,9 +1,12 @@
 package main
 
-import "os"
+import (
+	"github.com/Maksim-Gr/go_mux_api/internal/server"
+	"os"
+)
 
 func main() {
-	a := App{}
+	a := server.App{}
 	a.Initialize(
 		os.Getenv("APP_DB_USERNAME"),
 		os.Getenv("APP_DB_PASSWORD"),

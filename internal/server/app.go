@@ -1,23 +1,23 @@
-package main
+package server
 
 import (
 	"database/sql"
 	"encoding/json"
 	"fmt"
+	"github.com/gorilla/mux"
+	_ "github.com/lib/pq"
 	"log"
 	"net/http"
 	"strconv"
-
-	"github.com/gorilla/mux"
-	_ "github.com/lib/pq"
 )
 
-// App represents the main app
+// App represents the main server
 type App struct {
 	Router *mux.Router
 	DB     *sql.DB
 }
 
+// Initialize routes with
 func (a *App) initializeRoutes() {
 	a.Router.HandleFunc("/products", a.getProducts).Methods("GET")
 	a.Router.HandleFunc("/product", a.createProduct).Methods("POST")
@@ -26,6 +26,7 @@ func (a *App) initializeRoutes() {
 	a.Router.HandleFunc("/product/{id:[0-9]+}", a.deleteProduct).Methods("DELETE")
 }
 
+// Initialize App
 func (a *App) Initialize(user, password, dbname string) {
 	connectionString :=
 		fmt.Sprintf("user=%s password=%s dbname=%s sslmode=disable", user, password, dbname)
