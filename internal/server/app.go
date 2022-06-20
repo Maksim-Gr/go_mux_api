@@ -34,12 +34,13 @@ func (a *App) Initialize(user, password, dbname string) {
 		fmt.Sprintf("user=%s password=%s dbname=%s sslmode=disable", user, password, dbname)
 
 	var err error
-	a.DB, err = sql.Open("postges", connectionString)
+	a.DB, err = sql.Open("postgres", connectionString)
 	if err != nil {
 		log.Fatal(err)
 	}
 
 	a.Router = mux.NewRouter()
+	a.Router.Use(prometheusMiddleware)
 
 	a.initializeRoutes()
 }
