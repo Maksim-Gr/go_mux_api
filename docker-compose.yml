@@ -29,7 +29,19 @@ services:
     ports:
       - "9090:9090"
     restart: always
+  db:
+    image: postgres:14.1-alpine
+    restart: always
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    ports:
+      - '5432:5432'
+    volumes:
+      - db:/var/lib/postgresql/data
 
 volumes:
   grafana-storage:
   prometheus_data:
+  db:
+    driver: local
