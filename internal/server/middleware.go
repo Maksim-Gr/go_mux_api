@@ -61,6 +61,16 @@ func prometheusMiddleware(next http.Handler) http.Handler {
 	})
 }
 
+func (a *App) cacheMiddleWare(next http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if r.Method != "GET" {
+			next.ServeHTTP(w, r)
+			return
+		}
+		// Some
+	})
+}
+
 // init on start up
 func init() {
 	prometheus.Register(totalRequests)

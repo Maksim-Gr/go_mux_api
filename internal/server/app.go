@@ -4,6 +4,7 @@ import (
 	"database/sql"
 	"encoding/json"
 	"fmt"
+	"github.com/go-redis/redis"
 	"github.com/gorilla/mux"
 	_ "github.com/lib/pq"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
@@ -16,6 +17,7 @@ import (
 type App struct {
 	Router *mux.Router
 	DB     *sql.DB
+	Cache  *redis.Client
 }
 
 // Initialize routes with
