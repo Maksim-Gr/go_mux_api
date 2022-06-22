@@ -5,7 +5,9 @@ import (
 	"github.com/prometheus/client_golang/prometheus"
 	"github.com/prometheus/client_golang/prometheus/promauto"
 	"net/http"
+	"net/http/httptest"
 	"strconv"
+	"time"
 )
 
 type responseWriter struct {
@@ -67,7 +69,21 @@ func (a *App) cacheMiddleWare(next http.Handler) http.Handler {
 			next.ServeHTTP(w, r)
 			return
 		}
-		// Some
+		content, err := a.Cache.Get(r.RequestURI).Result()
+		if err != nil {
+			rr := httptest.NewRecorder()
+			next.ServeHTTP(rr, r)
+			content = rr.Body.String()
+			err = a.Cache.Set(r.RequestURI, content, 10*time.Minute).Err()
+			if err != nil {
+				respondWithError(w, http.StatusInternalServerError, err.Error())
+			}
+			respondWithJson(w, http.StatusOK, content)
+			return
+		} else {
+			respondWithJson(w, http.StatusOK, content)
+			return
+		}
 	})
 }
 
