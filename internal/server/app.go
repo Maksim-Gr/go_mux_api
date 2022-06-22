@@ -31,7 +31,7 @@ func (a *App) initializeRoutes() {
 }
 
 // Initialize App
-func (a *App) Initialize(user, password, dbname string) {
+func (a *App) Initialize(user, password, dbname, cacheAddr, cachePass string) {
 	connectionString :=
 		fmt.Sprintf("user=%s password=%s dbname=%s sslmode=disable", user, password, dbname)
 
@@ -41,8 +41,14 @@ func (a *App) Initialize(user, password, dbname string) {
 		log.Fatal(err)
 	}
 
+	a.Cache = redis.NewClient(&redis.Options{
+		Addr:     cacheAddr,
+		Password: cachePass,
+		DB:       0,
+	})
+
 	a.Router = mux.NewRouter()
-	a.Router.Use(prometheusMiddleware)
+	a.Router.Use(prometheusMiddleware, a.cacheMiddleWare)
 
 	a.initializeRoutes()
 }
