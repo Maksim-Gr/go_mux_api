@@ -2,6 +2,10 @@ export APP_DB_USERNAME=postgres
 export APP_DB_PASSWORD=postgres
 export APP_DB_NAME=postgres
 
+export REDIS_HOST=cache
+export REDIS_PORT=6379
+export REDIS_PASSWORD=eYVX7EwVmmxKPCDmwMtyKVge8oLd2t81
+
 export TEST_DB_USERNAME=$APP_DB_USERNAME
 export TEST_DB_PASSWORD=$APP_DB_PASSWORD
 export TEST_DB_NAME=$APP_DB_NAME
